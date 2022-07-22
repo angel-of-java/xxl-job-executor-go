@@ -6,13 +6,15 @@ import (
 )
 
 type Options struct {
-	ServerAddr   string        `json:"server_addr"`   //调度中心地址
-	AccessToken  string        `json:"access_token"`  //请求令牌
-	Timeout      time.Duration `json:"timeout"`       //接口超时时间
-	ExecutorIp   string        `json:"executor_ip"`   //本地(执行器)IP(可自行获取)
-	ExecutorPort string        `json:"executor_port"` //本地(执行器)端口
-	RegistryKey  string        `json:"registry_key"`  //执行器名称
-	LogDir       string        `json:"log_dir"`       //日志目录
+	ServerAddr       string        `json:"server_addr"`       //调度中心地址
+	AccessToken      string        `json:"access_token"`      //请求令牌
+	Timeout          time.Duration `json:"timeout"`           //接口超时时间
+	ExecutorAddress  string        `json:"executor_address"`  //本地执行器地址(域名)
+	ExecutorIp       string        `json:"executor_ip"`       //本地(执行器)IP(可自行获取)
+	ExecutorPort     string        `json:"executor_port"`     //本地(执行器)端口
+	RegistryKey      string        `json:"registry_key"`      //执行器名称
+	LogDir           string        `json:"log_dir"`           //日志目录
+	RegisterDuration int           `json:"register_duration"` //执行器注册时间间隔
 
 	l Logger //日志处理
 }
@@ -56,6 +58,12 @@ func AccessToken(token string) Option {
 	}
 }
 
+func ExecutorAddress(address string) Option {
+	return func(o *Options) {
+		o.ExecutorAddress = address
+	}
+}
+
 // ExecutorIp 设置执行器IP
 func ExecutorIp(ip string) Option {
 	return func(o *Options) {
@@ -81,5 +89,12 @@ func RegistryKey(registryKey string) Option {
 func SetLogger(l Logger) Option {
 	return func(o *Options) {
 		o.l = l
+	}
+}
+
+// SetLogger 设置日志处理器
+func SetRegisterDuration(registerDuration int) Option {
+	return func(o *Options) {
+		o.RegisterDuration = registerDuration
 	}
 }

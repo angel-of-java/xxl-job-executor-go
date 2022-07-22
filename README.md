@@ -3,16 +3,14 @@
 # 支持
 ```	
 1.执行器注册
-2.耗时任务取消
+2.go无法手动停止协程，因此暂不支持耗时任务取消与重试
 3.任务注册，像写http.Handler一样方便
 4.任务panic处理
-5.阻塞策略处理
+5.go无法手动停止协程，因此暂不支持阻塞策略处理，旧的任务执行时，新的任务会直接丢弃
 6.任务完成支持返回执行备注
-7.任务超时取消 (单位：秒，0为不限制)
-8.失败重试次数(在参数param中，目前由任务自行处理)
-9.可自定义日志
-10.自定义日志查看handler
-11.支持外部路由（可与gin集成）
+7.可自定义日志
+8.自定义日志查看handler
+9.支持外部路由（可与gin集成）
 ```
 
 # Example
@@ -30,6 +28,7 @@ func main() {
 	exec := xxl.NewExecutor(
 		xxl.ServerAddr("http://127.0.0.1/xxl-job-admin"),
 		xxl.AccessToken(""),            //请求令牌(默认为空)
+		xxl.ExecutorAddress("http://127.0.0.1:8080"), //不设置默认使用IP+port
 		xxl.ExecutorIp("127.0.0.1"),    //可自动获取
 		xxl.ExecutorPort("9999"),       //默认9999（非必填）
 		xxl.RegistryKey("golang-jobs"), //执行器名称

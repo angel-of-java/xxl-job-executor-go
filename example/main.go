@@ -9,23 +9,25 @@ import (
 
 func main() {
 	exec := xxl.NewExecutor(
-		xxl.ServerAddr("http://127.0.0.1/xxl-job-admin"),
-		xxl.AccessToken(""),            //请求令牌(默认为空)
-		xxl.ExecutorIp("127.0.0.1"),    //可自动获取
-		xxl.ExecutorPort("9999"),       //默认9999（非必填）
-		xxl.RegistryKey("golang-jobs"), //执行器名称
-		xxl.SetLogger(&logger{}),       //自定义日志
+		xxl.ServerAddr("http://127.0.0.1:8080/xxl-job-admin"),
+		xxl.AccessToken(""),                          //请求令牌(默认为空)
+		xxl.ExecutorAddress("http://127.0.0.1:9999"), //不设置默认使用 http://IP+port
+		xxl.ExecutorIp("127.0.0.1"),                  //可自动获取
+		xxl.ExecutorPort("9999"),                     //默认9999（非必填）
+		xxl.RegistryKey("golang-jobs"),               //执行器名称
+		xxl.SetLogger(&logger{}),                     //自定义日志
+		xxl.SetRegisterDuration(20),                  //执行器心跳检测时间间隔(不设置默认20秒)
 	)
 	exec.Init()
-	//设置日志查看handler
-	exec.LogHandler(func(req *xxl.LogReq) *xxl.LogRes {
-		return &xxl.LogRes{Code: 200, Msg: "", Content: xxl.LogResContent{
-			FromLineNum: req.FromLineNum,
-			ToLineNum:   2,
-			LogContent:  "这个是自定义日志handler",
-			IsEnd:       true,
-		}}
-	})
+	//设置调度器日志查看handler
+	//exec.LogHandler(func(req *xxl.LogReq) *xxl.LogRes {
+	//	return &xxl.LogRes{Code: 200, Msg: "", Content: xxl.LogResContent{
+	//		FromLineNum: req.FromLineNum,
+	//		ToLineNum:   2,
+	//		LogContent:  "这个是自定义日志handler",
+	//		IsEnd:       true,
+	//	}}
+	//})
 	//注册任务handler
 	exec.RegTask("task.test", task.Test)
 	exec.RegTask("task.test2", task.Test2)

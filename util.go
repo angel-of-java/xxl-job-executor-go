@@ -29,11 +29,7 @@ func returnCall(req *RunReq, code int64, msg string) []byte {
 }
 
 //杀死任务返回
-func returnKill(req *killReq, code int64) []byte {
-	msg := ""
-	if code != 200 {
-		msg = "Task kill err"
-	}
+func returnKill(msg string, code int64) []byte {
 	data := res{
 		Code: code,
 		Msg:  msg,
